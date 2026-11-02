@@ -3,11 +3,17 @@ name = "djangorestframework-camel-case"
 version = "1.4.2"
 description = "Camel case JSON support for Django REST framework."
 readme = "README.rst"
-authors = [
+maintainers = [
     { name = "Justin Michalicek", email = "jmichalicek@gmail.com" }
 ]
+authors = [
+  { name = "Vitaly Babiy", email = "vbabiy86@gmail.com"}
+]
 requires-python = ">=3.7,<3.10"
-dependencies = []
+dependencies = [
+  "djangorestframework>=3.13",
+  "django>=3.2"
+]
 license = "BSD-3-Clause"
 
 [project.scripts]
@@ -17,27 +23,27 @@ djangorestframework-camel-case = "djangorestframework_camel_case:main"
 requires = ["uv_build>=0.13.6,<0.14.0"]
 build-backend = "uv_build"
 
-dependencies = [
-  "djangorestframework>=3.13s.0",
-  "django>=3.2"
-]
-
 [project.urls]
 Homepage = "https://github.com/jmichalicek/djangorestframework-camel-case"
 
-
 [dependency-groups]
+test = [
+  "pytest",
+  "pytest-django",
+  "djangorestframework>=3.13"
+]
 dev = [
   "ruff",
   "pre-commit",
   "mypy",
   "django-stubs",
   "djangorestframework-stubs",
-  "pyupgrade",
-  "django-upgrade",
+  { include-group = "test" }
+  
 ]
 
 [tool.mypy]
+mypy_path = "src/"
 plugins = ["mypy_django_plugin.main"]
 exclude = 'migrations'
 ignore_missing_imports = true
@@ -52,3 +58,6 @@ exclude = ["migrations", ".uv_cache", ".ruff_cache", ".venv"]
 [tool.ruff.lint.isort]
 section-order = ["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
 known-first-party = ["djangorestframework_camel_case"]
+
+[tool.pytest]
+django_find_project = false
