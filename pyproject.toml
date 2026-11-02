@@ -39,6 +39,8 @@ dev = [
   "mypy",
   "django-stubs",
   "djangorestframework-stubs",
+  "pyupgrade",
+  "django-upgrade",
   { include-group = "test" } 
 ]
 django52 = [ "django>=5.2a1,<6" ]
