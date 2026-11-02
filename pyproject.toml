@@ -1,23 +1,54 @@
-[tool.black]
-line-length = 88
-target_version = ['py37',  'py38', 'py39']
-include = '\.pyi?$'
-exclude = '''
+[project]
+name = "djangorestframework-camel-case"
+version = "1.4.2"
+description = "Camel case JSON support for Django REST framework."
+readme = "README.rst"
+authors = [
+    { name = "Justin Michalicek", email = "jmichalicek@gmail.com" }
+]
+requires-python = ">=3.7,<3.10"
+dependencies = []
+license = "BSD-3-Clause"
 
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
-)
-'''
+[project.scripts]
+djangorestframework-camel-case = "djangorestframework_camel_case:main"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
+
+dependencies = [
+  "djangorestframework>=3.13s.0",
+  "django>=3.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/jmichalicek/djangorestframework-camel-case"
+
+
+[dependency-groups]
+dev = [
+  "ruff",
+  "pre-commit",
+  "mypy",
+  "django-stubs",
+  "djangorestframework-stubs",
+  "pyupgrade",
+  "django-upgrade",
+]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main"]
+exclude = 'migrations'
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py37"
+exclude = ["migrations", ".uv_cache", ".ruff_cache", ".venv"]
+
+[tool.ruff.lint.isort]
+section-order = ["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
+known-first-party = ["djangorestframework_camel_case"]
