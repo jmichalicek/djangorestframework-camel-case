@@ -46,6 +46,34 @@ dev = [
 django52 = [ "django>=5.2a1,<6" ]
 django60 = [ "django>=6a1,<6.1; python_version>='3.12'" ]
 django61 = [ "django>=6.1a1,<6.2; python_version>='3.12'" ]
+drf316 = [ "djangorestframework>=3.16,<3.17" ]
+drf317 = [ "djangorestframework>=3.17,<3.18" ]
+drf318 = [ "djangorestframework>=3.18,<3.19" ]
+drf316dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf316" } 
+]
+drf317dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf317" } 
+]
+drf317dj60 = [
+    { include-group = "django60" },
+    { include-group = "drf317" } 
+]
+drf318dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf318" } 
+]
+drf318dj60 = [
+    { include-group = "django60" },
+    { include-group = "drf318" } 
+]
+drf318dj61 = [
+    { include-group = "django61" },
+    { include-group = "drf318" } 
+]
+
 
 [tool.uv]
 conflicts = [
@@ -53,6 +81,19 @@ conflicts = [
     { group = "django52" },
     { group = "django60" },
     { group = "django61" },
+  ],
+  [
+    { group = "drf316" },
+    { group = "drf317" },
+    { group = "drf318" },
+  ],
+  [
+    { group = "drf316dj52" },
+    { group = "drf317dj52" },
+    { group = "drf317dj60" },
+    { group = "drf318dj52" },
+    { group = "drf318dj60" },
+    { group = "drf318dj61" },
   ],
 ]
 
