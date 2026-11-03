@@ -70,7 +70,7 @@ target-version = "py37"
 exclude = ["migrations", ".uv_cache", ".ruff_cache", ".venv"]
 
 [tool.ruff.lint.isort]
-section-order = ["future", "standard-library", "django", "wagtail", "third-party", "first-party", "local-folder"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
 known-first-party = ["djangorestframework_camel_case"]
 
 [tool.pytest]

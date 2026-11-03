@@ -3,11 +3,12 @@ import json
 from django.conf import settings
 from django.http.multipartparser import (
     MultiPartParser as DjangoMultiPartParser,
+)
+from django.http.multipartparser import (
     MultiPartParserError,
 )
 from rest_framework.exceptions import ParseError
-from rest_framework.parsers import MultiPartParser, DataAndFiles
-from rest_framework.parsers import FormParser
+from rest_framework.parsers import DataAndFiles, FormParser, MultiPartParser
 
 from djangorestframework_camel_case.settings import api_settings
 from djangorestframework_camel_case.util import underscoreize
