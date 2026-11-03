@@ -322,5 +322,5 @@ class CamelCaseMiddleWareTestCase(TestCase):
         request = RequestFactory().get("/", query_dict)
 
         middleware(request)
-        (args, kwargs) = get_response_mock.call_args
+        (args, _) = get_response_mock.call_args
         self.assertEqual(args[0].GET, output_query)

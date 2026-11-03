@@ -25,7 +25,7 @@ class CamelCaseJSONParser(api_settings.PARSER_CLASS):
             data = stream.read().decode(encoding)
             return underscoreize(json.loads(data), **self.json_underscoreize)
         except ValueError as exc:
-            raise ParseError("JSON parse error - %s" % str(exc))
+            raise ParseError(f"JSON parse error - {exc}")
 
 
 class CamelCaseFormParser(FormParser):
@@ -70,4 +70,4 @@ class CamelCaseMultiPartParser(MultiPartParser):
                 underscoreize(files, **api_settings.JSON_UNDERSCOREIZE),
             )
         except MultiPartParserError as exc:
-            raise ParseError("Multipart form parse error - %s" % str(exc))
+            raise ParseError(f"Multipart form parse error - {exc}")
