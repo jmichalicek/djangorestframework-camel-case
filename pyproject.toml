@@ -1,23 +1,118 @@
-[tool.black]
-line-length = 88
-target_version = ['py37',  'py38', 'py39']
-include = '\.pyi?$'
-exclude = '''
+[project]
+name = "djangorestframework-camel-case"
+version = "1.4.2"
+description = "Camel case JSON support for Django REST framework."
+readme = "README.rst"
+maintainers = [
+    { name = "Justin Michalicek", email = "jmichalicek@gmail.com" }
+]
+authors = [
+  { name = "Vitaly Babiy", email = "vbabiy86@gmail.com"}
+]
+requires-python = ">=3.11"
+dependencies = [
+  "djangorestframework>=3.16.1",
+  "django>=5.2"
+]
+license = "BSD-3-Clause"
 
-(
-  /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
-    | \.hg
-    | \.mypy_cache
-    | \.tox
-    | \.venv
-    | _build
-    | buck-out
-    | build
-    | dist
-  )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
-)
-'''
+[project.scripts]
+djangorestframework-camel-case = "djangorestframework_camel_case:main"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
+
+[project.urls]
+Homepage = "https://github.com/jmichalicek/djangorestframework-camel-case"
+
+[dependency-groups]
+test = [
+  "pytest",
+  "pytest-django",
+  "djangorestframework>=3.16.1",
+  "coverage[toml]",
+]
+dev = [
+  "ruff",
+  "pre-commit",
+  "mypy",
+  "django-stubs",
+  "djangorestframework-stubs",
+  "pyupgrade",
+  "django-upgrade",
+  { include-group = "test" } 
+]
+django52 = [ "django>=5.2a1,<6" ]
+django60 = [ "django>=6a1,<6.1; python_version>='3.12'" ]
+django61 = [ "django>=6.1a1,<6.2; python_version>='3.12'" ]
+drf316 = [ "djangorestframework>=3.16,<3.17" ]
+drf317 = [ "djangorestframework>=3.17,<3.18" ]
+drf318 = [ "djangorestframework>=3.18,<3.19" ]
+drf316dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf316" } 
+]
+drf317dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf317" } 
+]
+drf317dj60 = [
+    { include-group = "django60" },
+    { include-group = "drf317" } 
+]
+drf318dj52 = [
+    { include-group = "django52" },
+    { include-group = "drf318" } 
+]
+drf318dj60 = [
+    { include-group = "django60" },
+    { include-group = "drf318" } 
+]
+drf318dj61 = [
+    { include-group = "django61" },
+    { include-group = "drf318" } 
+]
+
+
+[tool.uv]
+conflicts = [
+  [
+    { group = "django52" },
+    { group = "django60" },
+    { group = "django61" },
+  ],
+  [
+    { group = "drf316" },
+    { group = "drf317" },
+    { group = "drf318" },
+  ],
+  [
+    { group = "drf316dj52" },
+    { group = "drf317dj52" },
+    { group = "drf317dj60" },
+    { group = "drf318dj52" },
+    { group = "drf318dj60" },
+    { group = "drf318dj61" },
+  ],
+]
+
+[tool.mypy]
+mypy_path = "src/"
+plugins = ["mypy_django_plugin.main"]
+exclude = 'migrations'
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py37"
+exclude = ["migrations", ".uv_cache", ".ruff_cache", ".venv"]
+
+[tool.ruff.lint.isort]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+known-first-party = ["djangorestframework_camel_case"]
+
+[tool.pytest]
+django_find_project = false

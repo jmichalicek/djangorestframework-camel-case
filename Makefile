@@ -23,10 +23,10 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 djangorestframework_camel_case tests
+	flake8 src/djangorestframework_camel_case tests
 
 test:
-	python setup.py test
+	uv run pytest
 
 test-all:
 	tox
@@ -37,9 +37,15 @@ coverage:
 	coverage html
 	open htmlcov/index.html
 
-release: clean
-	python setup.py sdist upload
+django-upgrade:
+	 uv run django-upgrade src/*/*.py tests/*.py --target-version 5.2
 
-sdist: clean
-	python setup.py sdist
-	ls -l dist
+pyupgrade:
+	uv run pyupgrade src/djangorestframework_camel_case/*.py tests/*.py --py311-plus
+	
+# release: clean
+# 	python setup.py sdist upload
+
+# sdist: clean
+# 	python setup.py sdist
+# 	ls -l dist

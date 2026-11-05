@@ -3,8 +3,8 @@ from unittest import TestCase, mock
 
 from django.conf import settings
 from django.http import QueryDict
-from django.utils.functional import lazy
 from django.test.client import RequestFactory
+from django.utils.functional import lazy
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 from djangorestframework_camel_case.util import camelize, underscoreize
@@ -13,15 +13,13 @@ settings.configure()
 
 from djangorestframework_camel_case.middleware import CamelCaseMiddleWare
 
+
 class ImportTest(TestCase):
     def test_import_all(self):
         """
         A quick test that just imports everything, should crash in case any Django or DRF modules change
         """
-        from djangorestframework_camel_case import parser
-        from djangorestframework_camel_case import render
-        from djangorestframework_camel_case import settings
-        from djangorestframework_camel_case import middleware
+        from djangorestframework_camel_case import middleware, parser, render, settings
 
         assert parser
         assert render
@@ -200,7 +198,7 @@ class ReturnDictTest(TestCase):
 
 class NumberToCamelTestCase(TestCase):
     def test_dict_with_numbers_as_keys(self):
-        data = {1: 'test', 'a': 'abc'}
+        data = {1: "test", "a": "abc"}
         self.assertEqual(camelize(data), data)
 
 
@@ -272,6 +270,7 @@ class CamelToUnderscoreQueryDictTestCase(TestCase):
         output_query.update(output)
         self.assertEqual(underscoreize(query_dict), output_query)
 
+
 class CamelCaseMiddleWareTestCase(TestCase):
     def test_camel_case_to_underscore_query_params(self):
         get_response_mock = mock.MagicMock()
@@ -323,5 +322,5 @@ class CamelCaseMiddleWareTestCase(TestCase):
         request = RequestFactory().get("/", query_dict)
 
         middleware(request)
-        (args, kwargs) = get_response_mock.call_args
+        (args, _) = get_response_mock.call_args
         self.assertEqual(args[0].GET, output_query)

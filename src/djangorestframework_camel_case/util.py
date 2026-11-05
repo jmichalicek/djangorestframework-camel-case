@@ -6,7 +6,6 @@ from django.http import QueryDict
 from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_str
 from django.utils.functional import Promise
-
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 camelize_re = re.compile(r"[a-z0-9]?_[a-z0-9]")

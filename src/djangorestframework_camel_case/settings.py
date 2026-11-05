@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-
 from rest_framework.settings import APISettings
 
 USER_SETTINGS = getattr(settings, "JSON_CAMEL_CASE", {})
