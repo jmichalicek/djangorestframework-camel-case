@@ -1,6 +1,6 @@
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
-from rest_framework.settings import APISettings
+from django.core.signals import setting_changed
+from rest_framework.settings import APISettings as BaseAPISettings
 
 USER_SETTINGS = getattr(settings, "JSON_CAMEL_CASE", {})
 
@@ -13,24 +13,20 @@ DEFAULTS = {
 # List of settings that may be in string import notation.
 IMPORT_STRINGS = ("RENDERER_CLASS", "PARSER_CLASS")
 
-VALID_SETTINGS = {
-    "RENDERER_CLASS": (
-        "rest_framework.renderers.JSONRenderer",
-        "drf_orjson_renderer.renderers.ORJSONRenderer",
-        "drf_ujson.renderers.UJSONRenderer",
-        "rest_framework.renderers.UnicodeJSONRenderer",
-    ),
-    "PARSER_CLASS": ("rest_framework.parsers.JSONParser",),
-}
+class APISettings(BaseAPISettings):
+    @property
+    def user_settings(self):
+        if not hasattr(self, '_user_settings'):
+            self._user_settings = getattr(settings, 'JSON_CAMEL_CASE', {})
+        return self._user_settings
 
-
-def validate_settings(input_settings, valid_settings):
-    for setting_name, valid_values in valid_settings.items():
-        input_setting = input_settings.get(setting_name)
-        if input_setting and input_setting not in valid_values:
-            raise ImproperlyConfigured(setting_name)
-
-
-validate_settings(USER_SETTINGS, VALID_SETTINGS)
-
+    
 api_settings = APISettings(USER_SETTINGS, DEFAULTS, IMPORT_STRINGS)
+
+
+def reload_settings(*args, **kwargs):
+    setting = kwargs["setting"]
+    if setting == "JSON_CAMEL_CASE":
+        api_settings.reload()
+
+setting_changed.connect(reload_settings)
