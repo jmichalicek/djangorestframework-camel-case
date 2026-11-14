@@ -2,7 +2,7 @@
 name = "djangorestframework-camel-case"
 version = "1.4.2"
 description = "Camel case JSON support for Django REST framework."
-readme = "README.rst"
+readme = "README.md"
 maintainers = [
     { name = "Justin Michalicek", email = "jmichalicek@gmail.com" }
 ]
