@@ -7,10 +7,10 @@ from django.test.client import RequestFactory
 from django.utils.functional import lazy
 from rest_framework.utils.serializer_helpers import ReturnDict
 
-from djangorestframework_camel_case.middleware import CamelCaseMiddleWare
-from djangorestframework_camel_case.parser import CamelCaseJSONParser
-from djangorestframework_camel_case.render import CamelCaseJSONRenderer
-from djangorestframework_camel_case.util import camelize, underscoreize
+from drf_dromedary.middleware import CamelCaseMiddleWare
+from drf_dromedary.parser import CamelCaseJSONParser
+from drf_dromedary.render import CamelCaseJSONRenderer
+from drf_dromedary.util import camelize, underscoreize
 from tests.parser import SimpleCustomParser
 from tests.render import SimpleCustomRenderer
 
@@ -20,7 +20,7 @@ class ImportTest(SimpleTestCase):
         """
         A quick test that just imports everything, should crash in case any Django or DRF modules change
         """
-        from djangorestframework_camel_case import middleware, parser, render, settings
+        from drf_dromedary import middleware, parser, render, settings
 
         assert parser
         assert render

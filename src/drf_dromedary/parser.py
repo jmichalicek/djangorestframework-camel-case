@@ -10,8 +10,8 @@ from django.http.multipartparser import (
 from rest_framework.exceptions import ParseError
 from rest_framework.parsers import DataAndFiles, FormParser, MultiPartParser
 
-from djangorestframework_camel_case.settings import api_settings
-from djangorestframework_camel_case.util import underscoreize
+from drf_dromedary.settings import api_settings
+from drf_dromedary.util import underscoreize
 
 
 class CamelCaseJSONParser(api_settings.PARSER_CLASS):

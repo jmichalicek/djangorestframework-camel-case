@@ -1,13 +1,24 @@
-# Django REST Framework JSON CamelCase
+# DRF Dromedary
 
 Camel case JSON support for Django REST framework.
+
+> [!NOTE]
+> DRF Dromedary is a continuation of the work started by [@vbabiy](https://github.com/vbabiy/djangorestframework-camel-case) and other contributors
+>
+> Django REST Framework JSON CamelCase has seen very little activity
+> and is not tested against recent Python, Django, or Django REST
+> Framework versions although it continues to function with them.
+> With that in mind the project has been forked to allow testing with
+> current versions and to take advantage of language and packaging
+> ecosystem improvements.
+
 
 # Installation
 
 At the command line:
 
 ```
-$ pip install djangorestframework-camel-case
+$ pip install drf-dromedary
 ```
 
 Add the render and parser to your django settings file.
@@ -16,16 +27,16 @@ Add the render and parser to your django settings file.
 # ...
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": (
-        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-        "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+        "drf_dromedary.render.CamelCaseJSONRenderer",
+        "drf_dromedary.render.CamelCaseBrowsableAPIRenderer",
         # Any other renders
     ),
 
     "DEFAULT_PARSER_CLASSES": (
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
-        "djangorestframework_camel_case.parser.CamelCaseFormParser",
-        "djangorestframework_camel_case.parser.CamelCaseMultiPartParser",
-        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+        "drf_dromedary.parser.CamelCaseFormParser",
+        "drf_dromedary.parser.CamelCaseMultiPartParser",
+        "drf_dromedary.parser.CamelCaseJSONParser",
         # Any other parsers
     ),
 }
@@ -38,7 +49,7 @@ Add query param middleware to django settings file.
 # ...
 MIDDLEWARE = [
     # Any other middleware
-    'djangorestframework_camel_case.middleware.CamelCaseMiddleWare',
+    'drf_dromedary.middleware.CamelCaseMiddleWare',
 ]
 # ...
 ```
@@ -88,7 +99,7 @@ JSON_CAMEL_CASE = {
 Alternatively, you can change this behavior on a class level by setting `json_underscoreize`:
 
 ```python
-from djangorestframework_camel_case.parser import CamelCaseJSONParser
+from drf_dromedary.parser import CamelCaseJSONParser
 from rest_framework.generics import CreateAPIView
 
 class NoUnderscoreBeforeNumberCamelCaseJSONParser(CamelCaseJSONParser):
