@@ -1,6 +1,13 @@
 .. :changelog:
 
 History
+======
+
+(2026-11-05)
+------------
+Forked [Django REST Framework JSON CamelCase](https://github.com/vbabiy/djangorestframework-camel-case)
+
+Source Project History
 =======
 
 1.4.2 (2023-02-13)
