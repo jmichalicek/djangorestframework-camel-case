@@ -1,4 +1,7 @@
-Copyright (c) 2013, Vitaly Babiy
+Copyright (c) 2026, Justin Michalicek
+
+Copyright (c) 2013, Vitaly Babiy for portions of this code written prior to November 5, 2026 as part of the Django REST Framework JSON CamelCase project.
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
