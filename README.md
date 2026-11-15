@@ -2,17 +2,6 @@
 
 Camel case JSON support for Django REST framework.
 
-> [!NOTE]
-> DRF Dromedary is a continuation of the work started by [@vbabiy](https://github.com/vbabiy/djangorestframework-camel-case) and other contributors
->
-> Django REST Framework JSON CamelCase has seen very little activity
-> and is not tested against recent Python, Django, or Django REST
-> Framework versions although it continues to function with them.
-> With that in mind the project has been forked to allow testing with
-> current versions and to take advantage of language and packaging
-> ecosystem improvements.
-
-
 # Installation
 
 At the command line:
