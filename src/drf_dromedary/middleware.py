@@ -1,5 +1,5 @@
-from djangorestframework_camel_case.settings import api_settings
-from djangorestframework_camel_case.util import underscoreize
+from drf_dromedary.settings import api_settings
+from drf_dromedary.util import underscoreize
 
 
 class CamelCaseMiddleWare:

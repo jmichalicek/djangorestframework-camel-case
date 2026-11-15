@@ -5,8 +5,8 @@ def pytest_configure():
     settings.configure(
         REST_FRAMEWORK={
             "DEFAULT_RENDERER_CLASSES": (
-                "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-                "djangorestframework_camel_case.render.CamelCaseBrowsableAPIRenderer",
+                "drf_dromedary.render.CamelCaseJSONRenderer",
+                "drf_dromedary.render.CamelCaseBrowsableAPIRenderer",
             )
         },
         JSON_CAMEL_CASE={

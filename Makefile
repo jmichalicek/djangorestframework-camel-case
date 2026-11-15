@@ -32,7 +32,7 @@ test-all:
 	tox
 
 coverage:
-	coverage run --source djangorestframework_camel_case setup.py test
+	coverage run --source drf_dromedary setup.py test
 	coverage report -m
 	coverage html
 	open htmlcov/index.html
@@ -41,7 +41,7 @@ django-upgrade:
 	 uv run django-upgrade src/*/*.py tests/*.py --target-version 5.2
 
 pyupgrade:
-	uv run pyupgrade src/djangorestframework_camel_case/*.py tests/*.py --py311-plus
+	uv run pyupgrade src/drf_dromedary/*.py tests/*.py --py311-plus
 	
 # release: clean
 # 	python setup.py sdist upload
