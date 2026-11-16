@@ -9,7 +9,8 @@ from django.utils.functional import Promise
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 camelize_re = re.compile(r"[a-z0-9]?_[a-z0-9]")
-
+underscoreize_no_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z](?=[a-z])))([A-Z])")
+underscoreize_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))")
 
 def underscore_to_camel(match):
     group = match.group()
@@ -54,10 +55,9 @@ def camelize(data, **options):
 
 def get_underscoreize_re(options):
     if options.get("no_underscore_before_number"):
-        pattern = r"([a-z0-9]|[A-Z]?(?=[A-Z](?=[a-z])))([A-Z])"
+        return underscoreize_no_underscore_before_number_re
     else:
-        pattern = r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))"
-    return re.compile(pattern)
+        return underscoreize_underscore_before_number_re
 
 
 def camel_to_underscore(name, **options):
