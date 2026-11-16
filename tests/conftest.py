@@ -9,8 +9,4 @@ def pytest_configure():
                 "drf_dromedary.render.CamelCaseBrowsableAPIRenderer",
             )
         },
-        JSON_CAMEL_CASE={
-            "RENDERER_CLASS": "tests.render.SimpleCustomRenderer",
-            "PARSER_CLASS": "tests.parser.SimpleCustomParser",
-        },
     )

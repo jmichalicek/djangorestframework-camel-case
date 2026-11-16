@@ -1,15 +1,17 @@
+import importlib
 from copy import deepcopy
 from unittest import mock
 
+import pytest
 from django.http import QueryDict
 from django.test import SimpleTestCase
 from django.test.client import RequestFactory
 from django.utils.functional import lazy
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 from drf_dromedary.middleware import CamelCaseMiddleWare
-from drf_dromedary.parser import CamelCaseJSONParser
-from drf_dromedary.render import CamelCaseJSONRenderer
 from drf_dromedary.util import camelize, underscoreize
 from tests.parser import SimpleCustomParser
 from tests.render import SimpleCustomRenderer
@@ -327,9 +329,65 @@ class CamelCaseMiddleWareTestCase(SimpleTestCase):
         self.assertEqual(args[0].GET, output_query)
 
 
-def test_custom_renderer_has_correct_parent_class() -> None:
-    assert issubclass(CamelCaseJSONRenderer, SimpleCustomRenderer)
+@pytest.fixture
+def reload_render(request):
+    """
+    Exists to provide a finalizer which reloads the render library to allow for
+    changing settings which affect the CamelCaseJSONRenderer class' parent class.
+
+    This fixture should be listed before the settings fixture.
+    """
+    from drf_dromedary import render
+
+    def reload():
+        importlib.reload(render)
+
+    request.addfinalizer(reload)
 
 
-def test_custom_parser_has_correct_parent_class() -> None:
-    assert issubclass(CamelCaseJSONParser, SimpleCustomParser)
+@pytest.fixture
+def reload_parser(request):
+    """
+    Exists to provide a finalizer which reloads the parser library to allow for
+    changing settings which affect the CamelCaseJSONParser class' parent class.
+
+    This fixture should be listed before the settings fixture.
+    """
+    from drf_dromedary import parser
+
+    def reload():
+        importlib.reload(parser)
+
+    request.addfinalizer(reload)
+
+
+def test_renderer_default_parent_class() -> None:
+    from drf_dromedary import render
+
+    assert issubclass(render.CamelCaseJSONRenderer, JSONRenderer)
+
+
+def test_renderer_custom_parent_class(reload_render, settings) -> None:
+    settings.JSON_CAMEL_CASE = {
+        "RENDERER_CLASS": "tests.render.SimpleCustomRenderer",
+    }
+    from drf_dromedary import render
+
+    importlib.reload(render)
+    assert issubclass(render.CamelCaseJSONRenderer, SimpleCustomRenderer)
+
+
+def test_parser_default_parent_class() -> None:
+    from drf_dromedary import parser
+
+    assert issubclass(parser.CamelCaseJSONParser, JSONParser)
+
+
+def test_parser_custom_parent_class(reload_parser, settings) -> None:
+    settings.JSON_CAMEL_CASE = {
+        "PARSER_CLASS": "tests.parser.SimpleCustomParser",
+    }
+    from drf_dromedary import parser
+
+    importlib.reload(parser)
+    assert issubclass(parser.CamelCaseJSONParser, SimpleCustomParser)
