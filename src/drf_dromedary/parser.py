@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 import json
+from collections.abc import Mapping
+from typing import Any
 
 from django.conf import settings
 from django.http.multipartparser import (
@@ -14,8 +18,8 @@ from drf_dromedary.settings import api_settings
 from drf_dromedary.util import underscoreize
 
 
-class CamelCaseJSONParser(api_settings.PARSER_CLASS):
-    json_underscoreize = api_settings.JSON_UNDERSCOREIZE
+class CamelCaseJSONParser(api_settings.PARSER_CLASS):# type: ignore[misc, name-defined]
+    json_underscoreize: Mapping[str, Any] = api_settings.JSON_UNDERSCOREIZE
 
     def parse(self, stream, media_type=None, parser_context=None):
         parser_context = parser_context or {}
