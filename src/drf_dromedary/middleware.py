@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from drf_dromedary.settings import api_settings
 from drf_dromedary.util import underscoreize
 
