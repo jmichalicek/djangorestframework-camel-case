@@ -3,35 +3,28 @@ name = "drf-dromedary"
 version = "1.0.0"
 description = "Camel case JSON support for Django REST framework."
 readme = "README.md"
-maintainers = [
-    { name = "Justin Michalicek", email = "jmichalicek@gmail.com" }
-]
-authors = [
-  { name = "Vitaly Babiy", email = "vbabiy86@gmail.com"}
-]
+maintainers = [{ name = "Justin Michalicek", email = "jmichalicek@gmail.com" }]
+authors = [{ name = "Vitaly Babiy", email = "vbabiy86@gmail.com" }]
 requires-python = ">=3.11"
-dependencies = [
-  "djangorestframework>=3.16.1",
-  "django>=5.2"
-]
+dependencies = ["djangorestframework>=3.16.1", "django>=5.2"]
 license = "BSD-3-Clause"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Environment :: Web Environment",
-    "Framework :: Django",
-    "Framework :: Django :: 5.2",
-    "Framework :: Django :: 6.0",
-    "Framework :: Django :: 6.1",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
-    "Programming Language :: Python :: 3.15",
-    "Intended Audience :: Developers",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6.0",
+  "Framework :: Django :: 6.1",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
 ]
 
 [build-system]
@@ -56,38 +49,20 @@ dev = [
   "djangorestframework-stubs",
   "pyupgrade",
   "django-upgrade",
-  { include-group = "test" } 
+  { include-group = "test" },
 ]
-django52 = [ "django>=5.2a1,<6" ]
-django60 = [ "django>=6a1,<6.1; python_version>='3.12'" ]
-django61 = [ "django>=6.1a1,<6.2; python_version>='3.12'" ]
-drf316 = [ "djangorestframework>=3.16,<3.17" ]
-drf317 = [ "djangorestframework>=3.17,<3.18" ]
-drf318 = [ "djangorestframework>=3.18,<3.19" ]
-drf316dj52 = [
-    { include-group = "django52" },
-    { include-group = "drf316" } 
-]
-drf317dj52 = [
-    { include-group = "django52" },
-    { include-group = "drf317" } 
-]
-drf317dj60 = [
-    { include-group = "django60" },
-    { include-group = "drf317" } 
-]
-drf318dj52 = [
-    { include-group = "django52" },
-    { include-group = "drf318" } 
-]
-drf318dj60 = [
-    { include-group = "django60" },
-    { include-group = "drf318" } 
-]
-drf318dj61 = [
-    { include-group = "django61" },
-    { include-group = "drf318" } 
-]
+django52 = ["django>=5.2a1,<6"]
+django60 = ["django>=6a1,<6.1; python_version>='3.12'"]
+django61 = ["django>=6.1a1,<6.2; python_version>='3.12'"]
+drf316 = ["djangorestframework>=3.16,<3.17"]
+drf317 = ["djangorestframework>=3.17,<3.18"]
+drf318 = ["djangorestframework>=3.18,<3.19"]
+drf316dj52 = [{ include-group = "django52" }, { include-group = "drf316" }]
+drf317dj52 = [{ include-group = "django52" }, { include-group = "drf317" }]
+drf317dj60 = [{ include-group = "django60" }, { include-group = "drf317" }]
+drf318dj52 = [{ include-group = "django52" }, { include-group = "drf318" }]
+drf318dj60 = [{ include-group = "django60" }, { include-group = "drf318" }]
+drf318dj61 = [{ include-group = "django61" }, { include-group = "drf318" }]
 
 
 [tool.uv]
@@ -113,25 +88,30 @@ conflicts = [
 ]
 
 [tool.mypy]
+python_version = "3.11"
 mypy_path = "src/"
 namespace_packages = false
 warn_unreachable = true
-enable_error_code = [
-  "ignore-without-code",
-  "redundant-expr",
-  "truthy-bool",
-]
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
 strict = true
-overrides = [ { module = "tests.*", allow_untyped_defs = true } ]
+overrides = [
+  { module = "tests.*", allow_untyped_defs = true, allow_untyped_calls = true },
+]
 
 [tool.ruff]
 line-length = 120
 indent-width = 4
-target-version = "py37"
+target-version = "py311"
 exclude = ["migrations", ".uv_cache", ".ruff_cache", ".venv"]
 
 [tool.ruff.lint.isort]
-section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+section-order = [
+  "future",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder",
+]
 known-first-party = ["drf_dromedary"]
 
 [tool.pytest]
