@@ -31,7 +31,6 @@ REST_FRAMEWORK = {
         "drf_dromedary.render.CamelCaseBrowsableAPIRenderer",
         # Any other renders
     ),
-
     "DEFAULT_PARSER_CLASSES": (
         # If you use MultiPartFormParser or FormParser, we also have a camel case version
         "drf_dromedary.parser.CamelCaseFormParser",
@@ -49,7 +48,7 @@ Add query param middleware to django settings file.
 # ...
 MIDDLEWARE = [
     # Any other middleware
-    'drf_dromedary.middleware.CamelCaseMiddleWare',
+    "drf_dromedary.middleware.CamelCaseMiddleWare",
 ]
 # ...
 ```
@@ -102,8 +101,10 @@ Alternatively, you can change this behavior on a class level by setting `json_un
 from drf_dromedary.parser import CamelCaseJSONParser
 from rest_framework.generics import CreateAPIView
 
+
 class NoUnderscoreBeforeNumberCamelCaseJSONParser(CamelCaseJSONParser):
     json_underscoreize = {"no_underscore_before_number": True}
+
 
 class MyView(CreateAPIView):
     queryset = MyModel.objects.all()

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from typing import Any
 
 from django.http import QueryDict
 
@@ -152,4 +151,3 @@ def test_underscoreize_with_query_dict():
 def test_numeric_key():
     data = {1: "test"}
     assert underscoreize(data) == data
-

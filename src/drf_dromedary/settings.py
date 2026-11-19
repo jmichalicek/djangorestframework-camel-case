@@ -20,6 +20,7 @@ DEFAULTS = {
 # List of settings that may be in string import notation.
 IMPORT_STRINGS = ("RENDERER_CLASS", "PARSER_CLASS")
 
+
 class APISettings(BaseAPISettings):
     RENDERER_CLASS: type[JSONRenderer]
     PARSER_CLASS: type[JSONParser]
@@ -27,16 +28,18 @@ class APISettings(BaseAPISettings):
 
     @property
     def user_settings(self) -> Any:
-        if not hasattr(self, '_user_settings'):
-            self._user_settings = getattr(settings, 'JSON_CAMEL_CASE', {})
+        if not hasattr(self, "_user_settings"):
+            self._user_settings = getattr(settings, "JSON_CAMEL_CASE", {})
         return self._user_settings
 
 
 api_settings = APISettings(USER_SETTINGS, DEFAULTS, IMPORT_STRINGS)  # type: ignore[arg-type]
 
+
 def reload_settings(*args: Any, **kwargs: Any) -> None:
     setting = kwargs["setting"]
     if setting == "JSON_CAMEL_CASE":
         api_settings.reload()
+
 
 setting_changed.connect(reload_settings)

@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 from collections import OrderedDict
 from collections.abc import Iterable, Mapping
-from typing import Any
+from typing import Any, TypeGuard
 
 from django.core.files import File
 from django.http import QueryDict
@@ -11,11 +11,13 @@ from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_str
 from django.utils.functional import Promise
 from rest_framework.utils.serializer_helpers import ReturnDict
-from typing import TypeGuard
 
 camelize_re = re.compile(r"[a-z0-9]?_[a-z0-9]")
 underscoreize_no_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z](?=[a-z])))([A-Z])")
-underscoreize_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))")
+underscoreize_underscore_before_number_re = re.compile(
+    r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))"
+)
+
 
 def underscore_to_camel(match: re.Match[str]) -> str:
     group = match.group()
