@@ -22,13 +22,13 @@ def reload_parser(request):
     request.addfinalizer(reload)
 
 
-def test_parser_default_parent_class() -> None:
+def test_parser_default_parent_class():
     from drf_dromedary import parser
 
     assert issubclass(parser.CamelCaseJSONParser, JSONParser)
 
 
-def test_parser_custom_parent_class(reload_parser, settings) -> None:
+def test_parser_custom_parent_class(reload_parser, settings):
     settings.JSON_CAMEL_CASE = {
         "PARSER_CLASS": "tests.parser.SimpleCustomParser",
     }

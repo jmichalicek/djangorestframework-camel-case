@@ -11,6 +11,7 @@ from django.utils.datastructures import MultiValueDict
 from django.utils.encoding import force_str
 from django.utils.functional import Promise
 from rest_framework.utils.serializer_helpers import ReturnDict
+from typing import TypeGuard
 
 camelize_re = re.compile(r"[a-z0-9]?_[a-z0-9]")
 underscoreize_no_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z](?=[a-z])))([A-Z])")
@@ -24,7 +25,7 @@ def underscore_to_camel(match: re.Match[str]) -> str:
         return group[1].upper()
 
 
-def camelize(data: str | bytes | Promise | dict[Any, Any] | int, **options: Any) -> Any:
+def camelize(data: str | bytes | int | Promise | dict[Any, Any] | Iterable[Any], **options: Any) -> Any:
     # Handle lazy translated strings.
     ignore_fields = options.get("ignore_fields") or ()
     ignore_keys = options.get("ignore_keys") or ()
@@ -32,7 +33,7 @@ def camelize(data: str | bytes | Promise | dict[Any, Any] | int, **options: Any)
         data = force_str(data)
     if isinstance(data, dict):
         if isinstance(data, ReturnDict):
-            new_dict: ReturnDict | OrderedDict = ReturnDict(serializer=data.serializer)
+            new_dict: ReturnDict[Any, Any] | OrderedDict[Any, Any] = ReturnDict(serializer=data.serializer)
         else:
             new_dict = OrderedDict()
         for key, value in data.items():
@@ -69,20 +70,20 @@ def camel_to_underscore(name: str, **options: Mapping[str, Any]) -> str:
     return underscoreize_re.sub(r"\1_\2", name).lower().lstrip("_")
 
 
-def _get_iterable(data: dict | QueryDict) -> Iterable[Any]:
+def _get_iterable(data: dict[Any, Any]) -> Iterable[Any]:
     if isinstance(data, QueryDict):
         return data.lists()
     else:
         return data.items()
 
 
-def underscoreize(data: str | bytes | Promise | dict[Any, Any] | int, **options: Any) -> Any:
+def underscoreize(data: str | bytes | int | Promise | dict[Any, Any] | Iterable[Any], **options: Any) -> Any:
     ignore_fields = options.get("ignore_fields") or ()
     ignore_keys = options.get("ignore_keys") or ()
     if isinstance(data, dict):
         new_dict = {}
         if type(data) == MultiValueDict:
-            new_data: MultiValueDict = MultiValueDict()
+            new_data: MultiValueDict[Any, Any] = MultiValueDict()
             for key, value in data.items():
                 new_data.setlist(camel_to_underscore(key, **options), data.getlist(key))
             return new_data
@@ -113,7 +114,7 @@ def underscoreize(data: str | bytes | Promise | dict[Any, Any] | int, **options:
     return data
 
 
-def is_iterable(obj: Any) -> bool:
+def is_iterable(obj: Any) -> TypeGuard[Iterable[Any]]:
     try:
         iter(obj)
     except TypeError:

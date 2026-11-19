@@ -5,7 +5,8 @@ from typing import Any
 
 from django.conf import settings
 from django.core.signals import setting_changed
-from rest_framework.renderers import BaseRenderer
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 from rest_framework.settings import APISettings as BaseAPISettings
 
 USER_SETTINGS = getattr(settings, "JSON_CAMEL_CASE", {})
@@ -20,7 +21,8 @@ DEFAULTS = {
 IMPORT_STRINGS = ("RENDERER_CLASS", "PARSER_CLASS")
 
 class APISettings(BaseAPISettings):
-    RENDERER_CLASS: type[BaseRenderer]
+    RENDERER_CLASS: type[JSONRenderer]
+    PARSER_CLASS: type[JSONParser]
     JSON_UNDERSCOREIZE: Mapping[str, Any]
 
     @property
