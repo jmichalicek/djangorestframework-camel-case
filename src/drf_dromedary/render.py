@@ -23,5 +23,5 @@ class CamelCaseJSONRenderer(api_settings.RENDERER_CLASS):  # type: ignore[misc, 
 class CamelCaseBrowsableAPIRenderer(BrowsableAPIRenderer):
     def render(
         self, data: Any, accepted_media_type: str | None = None, renderer_context: Mapping[str, Any] | None = None
-    ) -> str | bytes:
-        return super().render(camelize(data, **api_settings.JSON_UNDERSCOREIZE), accepted_media_type, renderer_context)  # type: ignore[no-any-return]
+    ) -> str:
+        return super().render(camelize(data, **api_settings.JSON_UNDERSCOREIZE), accepted_media_type, renderer_context)

@@ -1,13 +1,8 @@
 from __future__ import annotations
 
-import json
 from collections.abc import Mapping
 from typing import IO, TYPE_CHECKING, Any
 
-from django.conf import settings
-from django.http.multipartparser import (
-    MultiPartParser as DjangoMultiPartParser,
-)
 from django.http.multipartparser import (
     MultiPartParserError,
 )
@@ -32,12 +27,9 @@ class CamelCaseJSONParser(api_settings.PARSER_CLASS):  # type: ignore[misc, name
     def parse(
         self, stream: IO[Any], media_type: str | None = None, parser_context: Mapping[str, Any] | None = None
     ) -> Any:
-        parser_context = parser_context or {}
-        encoding = parser_context.get("encoding", settings.DEFAULT_CHARSET)
 
         try:
-            data = stream.read().decode(encoding)
-            return underscoreize(json.loads(data), **self.json_underscoreize)
+            return underscoreize(super().parse(stream, media_type, parser_context), **self.json_underscoreize)
         except ValueError as exc:
             raise ParseError(f"JSON parse error - {exc}")
 
@@ -75,17 +67,13 @@ class CamelCaseMultiPartParser(MultiPartParser):
         """
         parser_context = parser_context or {}
         request = parser_context["request"]
-        encoding = parser_context.get("encoding", settings.DEFAULT_CHARSET)
         meta = request.META.copy()
         meta["CONTENT_TYPE"] = media_type
-        upload_handlers = request.upload_handlers
 
         try:
-            parser = DjangoMultiPartParser(meta, stream, upload_handlers, encoding)
-            data, files = parser.parse()
-            return DataAndFiles(
-                underscoreize(data, **api_settings.JSON_UNDERSCOREIZE),
-                underscoreize(files, **api_settings.JSON_UNDERSCOREIZE),
-            )
+            data_and_files = super().parse(stream, media_type, parser_context)
+            data_and_files.data = underscoreize(data_and_files.data, **api_settings.JSON_UNDERSCOREIZE)
+            data_and_files.files = underscoreize(data_and_files.files, **api_settings.JSON_UNDERSCOREIZE)
+            return data_and_files
         except MultiPartParserError as exc:
             raise ParseError(f"Multipart form parse error - {exc}")
