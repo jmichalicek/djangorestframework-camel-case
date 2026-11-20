@@ -22,13 +22,13 @@ def reload_render(request):
     request.addfinalizer(reload)
 
 
-def test_renderer_default_parent_class() -> None:
+def test_renderer_default_parent_class():
     from drf_dromedary import render
 
     assert issubclass(render.CamelCaseJSONRenderer, JSONRenderer)
 
 
-def test_renderer_custom_parent_class(reload_render, settings) -> None:
+def test_renderer_custom_parent_class(reload_render, settings):
     settings.JSON_CAMEL_CASE = {
         "RENDERER_CLASS": "tests.render.SimpleCustomRenderer",
     }

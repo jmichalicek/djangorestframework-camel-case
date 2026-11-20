@@ -1,5 +1,9 @@
+from __future__ import annotations
+
 import re
 from collections import OrderedDict
+from collections.abc import Iterable, Mapping
+from typing import Any, TypeGuard
 
 from django.core.files import File
 from django.http import QueryDict
@@ -10,9 +14,12 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 camelize_re = re.compile(r"[a-z0-9]?_[a-z0-9]")
 underscoreize_no_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z](?=[a-z])))([A-Z])")
-underscoreize_underscore_before_number_re = re.compile(r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))")
+underscoreize_underscore_before_number_re = re.compile(
+    r"([a-z0-9]|[A-Z]?(?=[A-Z0-9](?=[a-z0-9]|(?<![A-Z])$)))([A-Z]|(?<=[a-z])[0-9](?=[0-9A-Z]|$)|(?<=[A-Z])[0-9](?=[0-9]|$))"
+)
 
-def underscore_to_camel(match):
+
+def underscore_to_camel(match: re.Match[str]) -> str:
     group = match.group()
     if len(group) == 3:
         return group[0] + group[2].upper()
@@ -20,7 +27,7 @@ def underscore_to_camel(match):
         return group[1].upper()
 
 
-def camelize(data, **options):
+def camelize(data: str | bytes | int | Promise | dict[Any, Any] | Iterable[Any], **options: Any) -> Any:
     # Handle lazy translated strings.
     ignore_fields = options.get("ignore_fields") or ()
     ignore_keys = options.get("ignore_keys") or ()
@@ -28,7 +35,7 @@ def camelize(data, **options):
         data = force_str(data)
     if isinstance(data, dict):
         if isinstance(data, ReturnDict):
-            new_dict = ReturnDict(serializer=data.serializer)
+            new_dict: ReturnDict[Any, Any] | OrderedDict[Any, Any] = ReturnDict(serializer=data.serializer)
         else:
             new_dict = OrderedDict()
         for key, value in data.items():
@@ -53,32 +60,32 @@ def camelize(data, **options):
     return data
 
 
-def get_underscoreize_re(options):
+def get_underscoreize_re(options: Mapping[str, Any]) -> re.Pattern[str]:
     if options.get("no_underscore_before_number"):
         return underscoreize_no_underscore_before_number_re
     else:
         return underscoreize_underscore_before_number_re
 
 
-def camel_to_underscore(name, **options):
+def camel_to_underscore(name: str, **options: Mapping[str, Any]) -> str:
     underscoreize_re = get_underscoreize_re(options)
     return underscoreize_re.sub(r"\1_\2", name).lower().lstrip("_")
 
 
-def _get_iterable(data):
+def _get_iterable(data: dict[Any, Any]) -> Iterable[Any]:
     if isinstance(data, QueryDict):
         return data.lists()
     else:
         return data.items()
 
 
-def underscoreize(data, **options):
+def underscoreize(data: str | bytes | int | Promise | dict[Any, Any] | Iterable[Any], **options: Any) -> Any:
     ignore_fields = options.get("ignore_fields") or ()
     ignore_keys = options.get("ignore_keys") or ()
     if isinstance(data, dict):
         new_dict = {}
         if type(data) == MultiValueDict:
-            new_data = MultiValueDict()
+            new_data: MultiValueDict[Any, Any] = MultiValueDict()
             for key, value in data.items():
                 new_data.setlist(camel_to_underscore(key, **options), data.getlist(key))
             return new_data
@@ -109,7 +116,7 @@ def underscoreize(data, **options):
     return data
 
 
-def is_iterable(obj):
+def is_iterable(obj: Any) -> TypeGuard[Iterable[Any]]:
     try:
         iter(obj)
     except TypeError:

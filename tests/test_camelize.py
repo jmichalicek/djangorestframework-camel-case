@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from django.utils.functional import lazy
+from rest_framework.serializers import BaseSerializer
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 from drf_dromedary.util import camelize
@@ -85,7 +86,11 @@ def test_dict_with_numbers_as_keys():
 
 
 def test_return_dict():
-    data = ReturnDict({"id": 3, "value": "val"}, serializer=object())
+    # Making mypy happy. If this is inline with ReturnDict() as the first arg
+    # with no type specified, due to mixed value types, mypy sees it as
+    # dict[str, object] and complains that it does not match the types for ReturnDict
+    map: dict[str, int | str] = {"id": 3, "value": "val"}
+    data = ReturnDict(map, serializer=BaseSerializer())
     camelized = camelize(data)
     assert data == camelized
     assert data.serializer == camelized.serializer

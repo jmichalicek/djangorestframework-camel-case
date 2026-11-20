@@ -1,4 +1,8 @@
+from __future__ import annotations
+
 import json
+from collections.abc import Mapping
+from typing import IO, TYPE_CHECKING, Any
 
 from django.conf import settings
 from django.http.multipartparser import (
@@ -7,17 +11,27 @@ from django.http.multipartparser import (
 from django.http.multipartparser import (
     MultiPartParserError,
 )
+from django.utils.datastructures import MultiValueDict
 from rest_framework.exceptions import ParseError
 from rest_framework.parsers import DataAndFiles, FormParser, MultiPartParser
 
 from drf_dromedary.settings import api_settings
 from drf_dromedary.util import underscoreize
 
+if TYPE_CHECKING:
+    from django.http.request import _ImmutableQueryDict
+else:
+    _ImmutableQueryDict = Any
 
-class CamelCaseJSONParser(api_settings.PARSER_CLASS):
-    json_underscoreize = api_settings.JSON_UNDERSCOREIZE
 
-    def parse(self, stream, media_type=None, parser_context=None):
+class CamelCaseJSONParser(api_settings.PARSER_CLASS):  # type: ignore[misc, name-defined]
+    json_underscoreize: Mapping[str, Any] = api_settings.JSON_UNDERSCOREIZE
+
+    # ideally this does not return Any. djangorestframework-stubs has a proper type definition, but
+    # it requires type checking only imports and underscoreize() return values do not match the type def.
+    def parse(
+        self, stream: IO[Any], media_type: str | None = None, parser_context: Mapping[str, Any] | None = None
+    ) -> Any:
         parser_context = parser_context or {}
         encoding = parser_context.get("encoding", settings.DEFAULT_CHARSET)
 
@@ -33,8 +47,10 @@ class CamelCaseFormParser(FormParser):
     Parser for form data.
     """
 
-    def parse(self, stream, media_type=None, parser_context=None):
-        return underscoreize(
+    def parse(
+        self, stream: IO[Any], media_type: str | None = None, parser_context: Mapping[str, Any] | None = None
+    ) -> _ImmutableQueryDict:
+        return underscoreize(  # type: ignore[no-any-return]
             super().parse(stream, media_type, parser_context),
             **api_settings.JSON_UNDERSCOREIZE,
         )
@@ -47,7 +63,9 @@ class CamelCaseMultiPartParser(MultiPartParser):
 
     media_type = "multipart/form-data"
 
-    def parse(self, stream, media_type=None, parser_context=None):
+    def parse(
+        self, stream: IO[Any], media_type: str | None = None, parser_context: Mapping[str, Any] | None = None
+    ) -> DataAndFiles[_ImmutableQueryDict, MultiValueDict[Any, Any]]:
         """
         Parses the incoming bytestream as a multipart encoded form,
         and returns a DataAndFiles object.
